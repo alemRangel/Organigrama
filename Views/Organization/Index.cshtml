@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewData["Title"] = "Organization";
+}
+
+<div class="chart" id="organization"></div>
+<script src="~/js/raphael.js"></script>
+<script src="~/js/Treant.js"></script>
+<script>
+    var idParam = @ViewData["id"];
+    var levelParam = @ViewData["level"];
+    var count = 1;
+    var aux = 0;
+    var config = {
+        container: "#organization",
+
+        connectors: {
+            type: 'step'
+        },
+        node: {
+            HTMLclass: 'nodeExample1'
+        },
+    },
+        ceo = {
+            id: "1",
+            level: "1",
+            text: {
+                name: "daniel",
+                title: "Chief executive officer",
+                contact: "Tel: 00 00",
+            },
+            link: {
+                href: "https://localhost:44313/Organization?level=1&id=1"
+            },
+        },
+
+        cto = {
+            id: "2",
+            level: "2",
+            parent: ceo,
+            text: {
+                name: "Joe Linux",
+                title: "Chief Technology Officer",
+            },
+            stackChildren: true,
+            link: {
+                href: "https://localhost:44313/Organization?level=2&id=2"
+            },
+        },
+        cbo = {
+            id: "3",
+            level: "2",
+            parent: ceo,
+            text: {
+                name: "Linda May",
+                title: "Chief Business Officer",
+            },
+            stackChildren: true,
+            link: {
+                href: "https://localhost:44313/Organization?level=2&id=3"
+            },
+        },
+        cdo = {
+            id: "4",
+            level: "2",
+            parent: ceo,
+            text: {
+                name: "John Green",
+                title: "Chief accounting officer",
+                contact: "Tel: 01 213 123 134",
+            },
+            link: {
+                href: "https://localhost:44313/Organization?level=2&id=4"
+            },
+        },
+        cio = {
+            id: "5",
+            level: "3",
+            parent: cto,
+            text: {
+                name: "Ron Blomquist",
+                title: "Chief Information Security Officer"
+            },
+            link: {
+                href: "https://localhost:44313/Organization?level=3&id=5"
+            },
+        },
+        ciso = {
+             id: "6",
+            level: "3",
+            parent: cto,
+            text: {
+                name: "Michael Rubin",
+                title: "Chief Innovation Officer",
+                contact: { val: "we@aregreat.com", href: "mailto:we@aregreat.com" }
+            },
+            link: {
+                href: "https://localhost:44313/Organization?level=3&id=6"
+            },
+        },
+        cio2 = {
+            id: "7",
+            level: "3",
+            parent: cdo,
+            text: {
+                name: "Erica Reel",
+                title: "Chief Customer Officer"
+            },
+            link: {
+                href: "https://localhost:44313/Organization?level=3&id=7"
+            },
+        },
+        ciso2 = {
+            id: "8",
+            level: "3",
+            parent: cbo,
+            text: {
+                name: "Alice Lopez",
+                title: "Chief Communications Officer"
+            },
+            link: {
+                href: "https://localhost:44313/Organization?level=3&id=8"
+            },
+        },
+        ciso3 = {
+            id: "9",
+            level: "3",
+            parent: cbo,
+            text: {
+                name: "Mary Johnson",
+                title: "Chief Brand Officer"
+            },
+            link: {
+                href: "https://localhost:44313/Organization?level=3&id=9"
+            },
+        },
+        ciso4 = {
+            id: "10",
+            level: "3",
+            parent: cbo,
+            text: {
+                name: "Kirk Douglas",
+                title: "Chief Business Development Officer"
+            },
+            link: {
+                href: "https://localhost:44313/Organization?level=3&id=10"
+            },
+        }
+
+
+    chart_config = [
+            config,
+            ceo,
+            cto,
+            cbo,
+            cdo,
+            cio,
+            ciso,
+            cio2,
+            ciso2,
+            ciso3,
+            ciso4
+    ];
+
+    chart_config1 = [config];
+
+   if (levelParam != "1") {
+        for (let i = 1; i< chart_config.length; i++) {
+            if (chart_config[i].level == levelParam && chart_config[i].id == idParam) {
+                    delete chart_config[i].parent;
+                    chart_config1.push(chart_config[i]);
+                    aux = count;
+                    break;
+            } 
+            count = count + 1;
+       }
+
+       for (let i = 1; i < chart_config.length; i++) {
+           if (chart_config[i].level > chart_config[aux].level) {
+                chart_config1.push(chart_config[i]);
+           } 
+        }
+   } 
+</script>
+<script>
+    if (levelParam == "1") {
+       new Treant(chart_config);
+   } else {
+        new Treant(chart_config1);
+   }
+</script>
